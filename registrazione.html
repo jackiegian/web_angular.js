@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/69702d5c69.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container-fluid bg-primary mb-5">
+        <div class="text-white text-center p-3">
+            <div class=" d-inline font-weight-bolder display-4">Ma(ng)a</div>
+            <i class="far fa-registered"></i>
+        </div>
+    </div>
+    <div class="container-fluid justify-content-center">
+        <div class="container border border-primary p-5 col-12 col-md-8 col-lg-6  rounded mb-5">
+
+            <form id="registrazione" name="registrazione" ng-app="app_manga" novalidate>
+                <div ng-controller="NameController" class="form-floating mt-3 mb-3">
+                    <input type="text" class="form-control" id="nome" placeholder="Inserisci il nome" name="nome" ng-model="inp_nome" ng-pattern="regex" required>
+                    <label for="nome">Nome</label>
+                    <div class="text-danger mt-2 container-fluid" ng-show="registrazione.nome.$dirty && registrazione.nome.$invalid">
+                        <span ng-show="registrazione.nome.$error.required">Campo nome obbligatorio</span>
+                        <span ng-show="registrazione.nome.$error.pattern">Campo nome non valido, i numeri non sono consentiti</span>
+                    </div>
+                </div>
+
+                <div ng-controller="NameController" class="form-floating mt-3 mb-3">
+                    <input type="text" class="form-control" id="cognome" placeholder="Inserisci il cognome" name="cognome" ng-model="inp_cognome" ng-pattern="regex" required>
+                    <label for="cognome">Cognome</label>
+                    <div class="text-danger mt-2 container-fluid" ng-show="registrazione.cognome.$dirty && registrazione.cognome.$invalid">
+                        <span ng-show="registrazione.cognome.$error.required">Campo cognome obbligatorio</span>
+                        <span ng-show="registrazione.cognome.$error.pattern">Campo cognome non valido, i numeri non sono consentiti</span>
+                    </div>
+                </div>
+
+                <div class="form-floating mt-3 mb-3">
+                    <input type="email" class="form-control" id="email" placeholder="Inserisci l'indirizzo email" name="email" ng-model="inp_email" required>
+                    <label for="email">Indirizzo email</label>
+                    <div class="text-danger mt-2 container-fluid" ng-show="registrazione.email.$dirty && registrazione.email.$invalid">  
+                        <span ng-show="registrazione.email.$error.required">Campo email obbligatorio</span>
+                        <span ng-show="registrazione.email.$error.email">Indirizzo email non valido</span>
+                    </div>
+                </div>
+
+                <div class="form-floating mt-3 mb-3">
+                    <input type="text" class="form-control" id="user" placeholder="Inserisci l'username" name="user" ng-model="inp_user" required>
+                    <label for="user">Username</label>
+                    <div class="text-danger mt-2 container-fluid" ng-show="registrazione.user.$dirty && registrazione.user.$invalid">  
+                        <span ng-show="registrazione.user.$error.required">Campo username obbligatorio</span>
+                    </div>
+                </div>
+
+                <div ng-controller="PasswordController" class="form-floating mt-3 mb-3">
+                    <!--Espressione che cambia il type in base alla funzione togglePassword che si attiva al click della checkbox sottostante-->
+                    <input type="{{ typePassword ? 'text' : 'password' }}" class="form-control" id="password" placeholder="Inserisci la password" name="password" ng-model="inp_password" ng-pattern="regex" required>
+                    <label for="password">Password</label>
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input" type="checkbox" id="switch" ng-click="togglePassword()">
+                        <label class="form-check-label" for="switch">Mostra password</label>
+                    </div>
+                    <div class="text-danger mt-2 container-fluid" ng-show="registrazione.password.$dirty && registrazione.password.$invalid">
+                        <span ng-show="registrazione.password.$error.required">Password obbligatoria</span>
+                        <span ng-show="registrazione.password.$error.pattern">Password non valida <br> Inserire una password lunga almeno 8 caratteri contenente almeno un carattere maiuscolo, almeno uno minuscolo e almeno uno tra "!@#$%^&*_=+-"</span>
+                    </div>
+                </div>
+                
+                <div class="text-center" ng-controller="SubmitController">
+                    <input class="btn btn-danger btn-lg mt-4 mr-2" type="reset" value="Annulla">
+                    <!--Bottone di submit disabilitato se il form non viene mai modificato(pristine) o se non viene compilato correttamente-->
+                    <button class="btn btn-success btn-lg mt-4 ml-2" ng-click="apriSito()" ng-disabled="registrazione.$pristine || registrazione.$dirty && registrazione.$invalid">Registra</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer class="bg-light p-4">
+        <div class="container-fluid row">
+            <div class="col-12 text-center col-lg-4 mt-3">               
+                <div class=" d-inline font-weight-bolder display-6">Ma(ng)a</div>
+                <i class="far fa-registered"></i>
+            </div>
+            <div class="col-12 col-lg-4 mt-3">
+                <div class="text-center"><h4>Informazioni</h4></div> <br>
+                Ma(ng)a nasce dall'idea di creare un portale accessibile a tutti gli amanti dei manga. Gli utenti iscritti al sito web hanno la possibilità di trovare i propri manga preferiti, scaricarli e leggerli su ogni dispositivo a loro disposizione. <br> 
+                L'idea nasce nel 2021, nella mente di uno studente universitario che, per un'esame universitario decide di sviluppare quest'idea trascinato dalla sua passione dei famosissimi fumetti giapponesi.
+            </div>
+            <div class="col-12 text-center col-lg-4 mt-3">
+                <h4>Seguici su</h4>
+                <img src="img/logos/facebook.png" alt="facebook logo" style="width:100px" class="m-4">
+                <img src="img/logos/instagram.png" alt="instagram logo" style="width:100px" class="m-4">
+                <img src="img/logos/twitter.png" alt="twitter logo" style="width:100px" class="m-4">
+                <img src="img/logos/tiktok.png" alt=" tiktok logo" style="width:100px" class="m-4">
+            </div>
+        </div>
+    </footer>
+    <script>
+        var app = angular.module("app_manga", [])
+        .controller('NameController', ['$scope', function($scope) {
+            $scope.regex = '[a-zA-Z]{1,100}';
+        }])
+        //Controller con pattern per inserimento password e con funzione toggle per mostrare o nascondere la password inserita
+        .controller('PasswordController', ['$scope', function($scope) {
+            $scope.regex = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,}$';
+            $scope.togglePassword = function () { 
+                $scope.typePassword = !$scope.typePassword; 
+            };
+        }])
+        .controller('SubmitController', ['$scope', '$window', function($scope, $window) {
+            $scope.apriSito = function() {
+                $window.open("home.html", "_self");
+            };
+        }]);
+    </script>
+</body>
+
+</html>

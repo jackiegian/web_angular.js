@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/69702d5c69.js" crossorigin="anonymous"></script>
+</head>
+
+<body ng-app="mangaService" ng-controller="mangaCtrl">
+    <div class="container-fluid bg-primary">
+        <div class="text-white text-center p-3">
+            <div class=" d-inline font-weight-bolder display-4">Ma(ng)a</div>
+            <i class="far fa-registered"></i>
+        </div>
+    </div>
+      <nav class="navbar navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <button class="btn btn-primary nav-item p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#wishList">
+                La mia lista <span class="badge bg-danger">{{prodotti.length}}</span>
+            </button>  
+            <form class="d-flex p-2">
+                <input type="search" class="form-control me-2" ng-model="search.titolo" placeholder="Cerca nel catalogo...">
+            </form>
+          </div>
+        </div>
+      </nav>
+      <h1 class="text-primary mt-4 text-center">Il nostro catalogo</h1>
+    <div class="container-fluid mt-4 bg-primary justify-content-center">
+        
+        <div id="viewer" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <span>
+                    <button type="button" data-bs-target="#viewer" data-bs-slide-to="0" class="active"></button>
+                </span>
+                <span ng-repeat="x in manga">
+                    <button type="button" data-bs-target="#viewer" data-bs-slide-to="{{x.id}}"></button>
+                </span>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="img/logos/logo.jpeg" alt="" class="d-block mx-auto w-50">
+                    <div class="carousel-caption w-50 mx-auto">
+                        <h1 class="text-white bg-dark">Tutti i nostri manga!</h1>
+                    </div>
+                </div>
+                <div class="carousel-item" ng-repeat="x in manga">
+                    <img src="{{x.url_view}}" alt="Immagine {{x.titolo}}" class="d-block mx-auto w-50">
+                    <div class="carousel-caption w-50 mx-auto">
+                        <p class="text-white bg-dark">{{x.titolo}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#viewer" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#viewer" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end" id="wishList">
+        <div class="offcanvas-header">
+            <h1 class="offcanvas-title">La mia lista</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="z in prodotti">
+                    <div class="container-fluid">
+                        <div class="float-start my-2">{{z}}</div> <button class="btn btn-danger float-end"
+                            ng-click="removeItem(z)"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-5 justify-content-center d-flex flex-wrap">
+        <div class="card mb-5 mx-auto" style="width:400px" ng-repeat="y in manga | filter:search as risultati">
+            <img class="card-img-top h-75" src="{{y.url_img}}" alt="Card image">
+            <div class="card-body">
+                <h4 class="card-title" ng-model="titolo">{{y.titolo}}</h4>
+                <p class="card-text">{{y.autore}} <br> {{y.prezzo | currency:'€'}} cad.</p>
+                <p ng-show="mostra[y.id-1]" class="card-text"> {{y.descrizione}}</p>
+        
+                <button class="btn btn-primary float-start" ng-click="toggleDescrizione(y.id)">{{showButton[y.id-1] ? 'Nascondi'
+                    : 'Mostra trama'}}</button>
+                <div ng-if="prodotti.indexOf(y.titolo) == -1">
+                    <button class="btn btn-success float-end" ng-click="addItem(y)"><i class="far fa-heart"></i></button>
+                </div>
+                <div ng-if="prodotti.indexOf(y.titolo) != -1">
+                    <button class="btn btn-success float-end" ng-click="removeItem(y)"><i class="fas fa-heart"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="bg-light p-4">
+        <div class="container-fluid row">
+            <div class="col-12 text-center col-lg-4 mt-3">               
+                <div class=" d-inline font-weight-bolder display-6">Ma(ng)a</div>
+                <i class="far fa-registered"></i>
+            </div>
+            <div class="col-12 col-lg-4 mt-3">
+                <div class="text-center"><h4>Informazioni</h4></div> <br>
+                Ma(ng)a nasce dall'idea di creare un portale accessibile a tutti gli amanti dei manga. Gli utenti iscritti al sito web hanno la possibilità di trovare i propri manga preferiti, scaricarli e leggerli su ogni dispositivo a loro disposizione. <br> 
+                L'idea nasce nel 2021, nella mente di uno studente universitario che, per un'esame universitario decide di sviluppare quest'idea trascinato dalla sua passione dei famosissimi fumetti giapponesi.
+            </div>
+            <div class="col-12 text-center col-lg-4 mt-3">
+                <h4>Seguici su</h4>
+                <img src="img/logos/facebook.png" alt="facebook logo" style="width:100px" class="m-4">
+                <img src="img/logos/instagram.png" alt="instagram logo" style="width:100px" class="m-4">
+                <img src="img/logos/twitter.png" alt="twitter logo" style="width:100px" class="m-4">
+                <img src="img/logos/tiktok.png" alt=" tiktok logo" style="width:100px" class="m-4">
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script>
+        var app = angular.module('mangaService', []);
+        app.controller('mangaCtrl', function ($scope, $http) {
+            $http.get("manga.php").then(function (response) {
+                $scope.manga = response.data;
+                $scope.lunghezza = response.data.length;
+            });
+
+            $scope.mostra = [];
+            $scope.showButton = [];
+
+            for(i=0;i<$scope.lunghezza;i++) {
+                $scope.mostra.push(false);
+                $scope.showButton.push(false);
+            }
+            
+
+            $scope.toggleDescrizione = function (y) {
+                $scope.showButton[y-1] = !$scope.showButton[y-1];
+                $scope.mostra[y-1] = !$scope.mostra[y-1];  
+            };
+
+            $scope.prodotti = [];
+
+            $scope.addItem = function (obj) {
+                if ($scope.prodotti.indexOf(obj.titolo == -1)) {
+                    $scope.prodotti.push(obj.titolo);
+                }
+            }
+
+            $scope.removeItem = function (obj) {
+                $scope.prodotti.splice(obj.titolo, 1);
+            }
+        });
+
+    </script>
+</body>
+
+</html>

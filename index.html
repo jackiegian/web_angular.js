@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/69702d5c69.js" crossorigin="anonymous"></script>
+</head>
+
+<body ng-app="loginApp" ng-controller="loginController">
+    <div class="container-fluid bg-primary mb-2">
+        <div class="text-white text-center p-3">
+            <div class=" d-inline font-weight-bolder display-4">Ma(ng)a</div>
+            <i class="far fa-registered"></i>
+        </div>
+    </div>
+
+    <div class="container-fluid justify-content-center">
+        <div class="container bg-primary text-white display-2 text-center mt-5 p-5 col-12 col-md-8 col-lg-6 rounded">
+            <div ng-show="imgUser">
+                <i class="far fa-user"></i>
+            </div>
+            <div ng-show="help">
+                <img class="d-block w-75 mx-auto" src="img/logos/deku.jpeg" alt="Help">
+            </div>
+
+            <div class="col-8 mx-auto">
+                <div class="input-group mb-3 mt-3">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" class="form-control" placeholder="Username" ng-model="username">
+                </div>
+            </div>
+            <div class="col-8 mx-auto">
+                <div class="input-group mb-3 col-8">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="{{ typePassword ? 'text' : 'password' }}" class="form-control" placeholder="Password" ng-model="password">
+                    <button ng-if="!typePassword" ng-click="togglePassword()" class="input-group-text"><i class="fas fa-eye"></i></button>
+                    <button ng-if="typePassword" ng-click="togglePassword()" class="input-group-text"><i class="fas fa-eye-slash"></i></button>
+                </div>
+            </div>
+            
+            <p class="text-white mt-2 h6" ng-show="errorLogin">Username o password errati</p>
+            <button class="btn btn-success btn-lg" ng-click="controlla()">Login</button>
+        </div>
+        <div class="container text-center mt-5 mb-5 p-2">
+            Non sei ancora registrato?<br>
+            <button ng-click="registrazione()" class="btn btn-outline-danger mt-3">
+                Registrati
+            </button>
+        </div>
+    </div>
+    <footer class="bg-light p-4">
+        <div class="container-fluid row">
+            <div class="col-12 text-center col-lg-4 mt-3">               
+                <div class=" d-inline font-weight-bolder display-6">Ma(ng)a</div>
+                <i class="far fa-registered"></i>
+            </div>
+            <div class="col-12 col-lg-4 mt-3">
+                <div class="text-center"><h4>Informazioni</h4></div> <br>
+                Ma(ng)a nasce dall'idea di creare un portale accessibile a tutti gli amanti dei manga. Gli utenti iscritti al sito web hanno la possibilità di trovare i propri manga preferiti, scaricarli e leggerli su ogni dispositivo a loro disposizione. <br> 
+                L'idea nasce nel 2021, nella mente di uno studente universitario che, per un'esame universitario decide di sviluppare quest'idea trascinato dalla sua passione dei famosissimi fumetti giapponesi.
+            </div>
+            <div class="col-12 text-center col-lg-4 mt-3">
+                <h4>Seguici su</h4>
+                <img src="img/logos/facebook.png" alt="facebook logo" style="width:100px" class="m-4">
+                <img src="img/logos/instagram.png" alt="instagram logo" style="width:100px" class="m-4">
+                <img src="img/logos/twitter.png" alt="twitter logo" style="width:100px" class="m-4">
+                <img src="img/logos/tiktok.png" alt="tiktok logo" style="width:100px" class="m-4">
+            </div>
+        </div>
+    </footer>
+    <script>
+        var app = angular.module('loginApp', []);
+        app.controller('loginController', function ($scope, $timeout, $window, $http) {
+            $scope.help = false;
+            $scope.imgUser = true;
+            $http.get("utenti.php").then(function (response) {
+                $scope.utenti = response.data;
+                $scope.lunghezza = response.data.length;
+            });
+            
+            
+            $scope.controlla = function () {
+                for (i = 0; i < $scope.lunghezza; i++) {
+                    if ($scope.utenti[i].username == $scope.username) {
+                        if ($scope.utenti[i].password == $scope.password) {
+                            $window.open("home.html", "_self");
+                        }   
+                        else {
+                            $scope.errorLogin = true;
+                        } 
+                    }
+                    else {
+                        $scope.errorLogin = true;
+                    }
+                };
+            };
+            $scope.togglePassword = function () {
+                $scope.typePassword = !$scope.typePassword;
+            };
+            $timeout(function () {
+                $scope.help = true;
+                $scope.imgUser = false;
+            }, 10000);
+            $scope.registrazione = function () {
+                $window.open("registrazione.html", "_self");
+            };
+        });
+    </script>
+</body>
+
+</html>
